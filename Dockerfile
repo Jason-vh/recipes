@@ -5,7 +5,7 @@ RUN bun install --frozen-lockfile
 COPY . .
 RUN bun run build
 
-FROM oven/bun:1-slim
+FROM oven/bun:1
 WORKDIR /app
 COPY --from=build /app/.output .output
 COPY --from=build /app/drizzle drizzle
