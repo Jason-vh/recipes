@@ -2,17 +2,15 @@
 
 Personal recipe collection at [recipes.vhtm.eu](https://recipes.vhtm.eu). Built with Nuxt 4 and PostgreSQL, deployed on Railway.
 
-Anyone can browse and search recipes. Writes are protected behind auth.
-
-The app exposes an MCP endpoint, so I can create and edit recipes from Claude.ai (mobile or web) using natural language. The MCP integration uses OAuth 2.1; the web UI uses simple bearer token auth.
+Anyone can browse recipes. Writes happen through the MCP endpoint, so I can create and edit recipes from Claude.ai (mobile or web) using natural language. Auth uses OAuth 2.1 with passkey (WebAuthn) authentication.
 
 ## Tech stack
 
-Bun, Nuxt 4, PostgreSQL, Drizzle ORM, Tailwind CSS, MCP SDK (`@modelcontextprotocol/sdk` + `mcp-auth`)
+Bun, Nuxt 4, PostgreSQL, Drizzle ORM, Tailwind CSS, MCP SDK (`@modelcontextprotocol/sdk` + `mcp-auth`), WebAuthn (`@simplewebauthn/server`)
 
 ## MCP tools
 
-`list_recipes`, `get_recipe`, `create_recipe`, `update_recipe`, `delete_recipe`, `list_tags`
+`list_recipes`, `get_recipe`, `create_recipe`, `update_recipe`, `delete_recipe`
 
 ## Local development
 
@@ -28,7 +26,7 @@ Runs at `http://localhost:3000`.
 | Variable       | Description                          |
 | -------------- | ------------------------------------ |
 | `DATABASE_URL` | PostgreSQL connection string         |
-| `APP_SECRET`   | Secret for auth tokens               |
+| `APP_SECRET`   | Secret for OAuth token validation    |
 | `APP_URL`      | Public URL (defaults to `localhost`)  |
 
 ### Database
