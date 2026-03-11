@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="7" fill="#F0EBE1"/>
+  <!-- Hat puff -->
+  <circle cx="10.5" cy="11" r="6" fill="#FAF7F2" stroke="#3D2B1F" stroke-width="1.4"/>
+  <circle cx="21.5" cy="11" r="6" fill="#FAF7F2" stroke="#3D2B1F" stroke-width="1.4"/>
+  <circle cx="16" cy="8.5" r="6" fill="#FAF7F2" stroke="#3D2B1F" stroke-width="1.4"/>
+  <!-- Cover inner lines -->
+  <rect x="10" y="13" width="12" height="6" fill="#FAF7F2"/>
+  <!-- Body -->
+  <rect x="9" y="15" width="14" height="10" rx="1.5" fill="#FAF7F2" stroke="#3D2B1F" stroke-width="1.4"/>
+  <!-- Band -->
+  <rect x="9" y="22.5" width="14" height="2.5" rx="1" fill="#C0634C"/>
+</svg>
