@@ -53,6 +53,11 @@ export default defineEventHandler(async (event) => {
     .set({ counter: verification.authenticationInfo.newCounter })
     .where(eq(passkeys.id, passkey.id));
 
+  // If no OAuth redirect_uri, this is a direct visit — just confirm success
+  if (!oauth.redirect_uri) {
+    return { success: true };
+  }
+
   // Issue OAuth authorization code
   const code = randomBytes(32).toString("hex");
   storeAuthCode(code, {

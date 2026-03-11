@@ -208,10 +208,14 @@ export default defineEventHandler((event) => {
           body: JSON.stringify({ challengeId, credential: serialized, oauth }),
         });
         if (!verRes.ok) throw new Error('Authentication failed');
-        const { redirect } = await verRes.json();
+        const result = await verRes.json();
 
-        // Redirect with auth code
-        window.location.href = redirect;
+        if (result.redirect) {
+          window.location.href = result.redirect;
+        } else {
+          // Direct visit (no OAuth flow) — just show success
+          document.getElementById('auth-view').innerHTML = '<p style="color:#16a34a">Authenticated successfully.</p>';
+        }
       } catch (e) {
         errEl.textContent = e.message || 'Authentication failed';
         errEl.classList.remove('hidden');
