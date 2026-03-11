@@ -8,7 +8,9 @@ async function runWithRetry(fn: () => Promise<void>, retries = 10, delay = 3000)
       return;
     } catch (error: any) {
       if (i === retries - 1) throw error;
-      console.log(`Migration attempt ${i + 1}/${retries} failed (${error?.message || error}), retrying in ${delay}ms...`);
+      console.log(
+        `Migration attempt ${i + 1}/${retries} failed (${error?.message || error}), retrying in ${delay}ms...`,
+      );
       await new Promise((r) => setTimeout(r, delay));
     }
   }

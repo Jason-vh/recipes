@@ -30,7 +30,7 @@ export function registerRecipeTools(server: McpServer) {
           },
         ],
       };
-    }
+    },
   );
 
   server.tool(
@@ -48,11 +48,9 @@ export function registerRecipeTools(server: McpServer) {
         };
       }
       return {
-        content: [
-          { type: "text" as const, text: JSON.stringify(recipe, null, 2) },
-        ],
+        content: [{ type: "text" as const, text: JSON.stringify(recipe, null, 2) }],
       };
-    }
+    },
   );
 
   server.tool(
@@ -79,7 +77,7 @@ export function registerRecipeTools(server: McpServer) {
             unit: z.string().optional().describe("Unit (e.g. 'cup', 'tbsp')"),
             item: z.string().describe("Ingredient name"),
             notes: z.string().optional().describe("Ingredient notes (e.g. 'diced')"),
-          })
+          }),
         )
         .optional()
         .describe("List of ingredients"),
@@ -89,23 +87,18 @@ export function registerRecipeTools(server: McpServer) {
             stepNumber: z.number().int().min(1).describe("Step number"),
             group: z.string().optional().describe("Instruction group"),
             text: z.string().describe("Instruction text"),
-          })
+          }),
         )
         .optional()
         .describe("List of instructions"),
-      tags: z
-        .array(z.string())
-        .optional()
-        .describe("Tag names (created if they don't exist)"),
+      tags: z.array(z.string()).optional().describe("Tag names (created if they don't exist)"),
     },
     async (params) => {
       const recipe = await createRecipe(params);
       return {
-        content: [
-          { type: "text" as const, text: JSON.stringify(recipe, null, 2) },
-        ],
+        content: [{ type: "text" as const, text: JSON.stringify(recipe, null, 2) }],
       };
-    }
+    },
   );
 
   server.tool(
@@ -133,7 +126,7 @@ export function registerRecipeTools(server: McpServer) {
             unit: z.string().optional(),
             item: z.string(),
             notes: z.string().optional(),
-          })
+          }),
         )
         .optional()
         .describe("Replace all ingredients"),
@@ -143,14 +136,11 @@ export function registerRecipeTools(server: McpServer) {
             stepNumber: z.number().int().min(1),
             group: z.string().optional(),
             text: z.string(),
-          })
+          }),
         )
         .optional()
         .describe("Replace all instructions"),
-      tags: z
-        .array(z.string())
-        .optional()
-        .describe("Replace all tags"),
+      tags: z.array(z.string()).optional().describe("Replace all tags"),
     },
     async ({ id, ...params }) => {
       const recipe = await updateRecipe(id, params);
@@ -161,11 +151,9 @@ export function registerRecipeTools(server: McpServer) {
         };
       }
       return {
-        content: [
-          { type: "text" as const, text: JSON.stringify(recipe, null, 2) },
-        ],
+        content: [{ type: "text" as const, text: JSON.stringify(recipe, null, 2) }],
       };
-    }
+    },
   );
 
   server.tool(
@@ -183,24 +171,15 @@ export function registerRecipeTools(server: McpServer) {
         };
       }
       return {
-        content: [
-          { type: "text" as const, text: "Recipe deleted successfully" },
-        ],
+        content: [{ type: "text" as const, text: "Recipe deleted successfully" }],
       };
-    }
+    },
   );
 
-  server.tool(
-    "list_tags",
-    "List all tags with recipe counts",
-    {},
-    async () => {
-      const tagList = await listTags();
-      return {
-        content: [
-          { type: "text" as const, text: JSON.stringify(tagList, null, 2) },
-        ],
-      };
-    }
-  );
+  server.tool("list_tags", "List all tags with recipe counts", {}, async () => {
+    const tagList = await listTags();
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(tagList, null, 2) }],
+    };
+  });
 }

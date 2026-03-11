@@ -28,16 +28,20 @@
       <span v-if="recipe.cookTime">Cook: {{ recipe.cookTime }} min</span>
       <span v-if="recipe.totalTime">Total: {{ recipe.totalTime }} min</span>
       <span v-if="recipe.servings">Servings: {{ recipe.servings }}</span>
-      <span v-if="recipe.source">Source: {{ recipe.sourceUrl ? '' : recipe.source }}<a v-if="recipe.sourceUrl" :href="recipe.sourceUrl" target="_blank" class="text-blue-600 hover:underline">{{ recipe.source || recipe.sourceUrl }}</a></span>
+      <span v-if="recipe.source"
+        >Source: {{ recipe.sourceUrl ? "" : recipe.source
+        }}<a
+          v-if="recipe.sourceUrl"
+          :href="recipe.sourceUrl"
+          target="_blank"
+          class="text-blue-600 hover:underline"
+          >{{ recipe.source || recipe.sourceUrl }}</a
+        ></span
+      >
     </div>
 
     <div v-if="recipe.tags?.length" class="flex flex-wrap gap-1.5 mb-6">
-      <UiTagPill
-        v-for="tag in recipe.tags"
-        :key="tag.slug"
-        :name="tag.name"
-        :slug="tag.slug"
-      />
+      <UiTagPill v-for="tag in recipe.tags" :key="tag.slug" :name="tag.name" :slug="tag.slug" />
     </div>
 
     <div v-if="recipe.imageUrl" class="rounded-xl overflow-hidden mb-6">
@@ -60,9 +64,7 @@
       <p class="text-sm text-amber-700 whitespace-pre-line">{{ recipe.notes }}</p>
     </div>
   </div>
-  <div v-else class="text-center py-12 text-gray-400">
-    Recipe not found.
-  </div>
+  <div v-else class="text-center py-12 text-gray-400">Recipe not found.</div>
 </template>
 
 <script setup lang="ts">

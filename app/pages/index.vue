@@ -8,7 +8,9 @@
       <NuxtLink
         to="/"
         class="px-2.5 py-1 text-xs rounded-full transition-colors"
-        :class="!activeTag ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+        :class="
+          !activeTag ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+        "
       >
         All
       </NuxtLink>
@@ -29,11 +31,7 @@
       No recipes found.
     </div>
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <RecipeRecipeCard
-        v-for="recipe in recipes"
-        :key="recipe.id"
-        :recipe="recipe"
-      />
+      <RecipeRecipeCard v-for="recipe in recipes" :key="recipe.id" :recipe="recipe" />
     </div>
   </div>
 </template>

@@ -4,11 +4,7 @@
     class="block bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
   >
     <div v-if="recipe.imageUrl" class="aspect-video bg-gray-100">
-      <img
-        :src="recipe.imageUrl"
-        :alt="recipe.title"
-        class="w-full h-full object-cover"
-      />
+      <img :src="recipe.imageUrl" :alt="recipe.title" class="w-full h-full object-cover" />
     </div>
     <div class="p-4">
       <div class="flex items-start justify-between gap-2">
@@ -17,10 +13,7 @@
         </h3>
         <span v-if="recipe.isFavorite" class="text-red-500 shrink-0">&#9829;</span>
       </div>
-      <p
-        v-if="recipe.description"
-        class="text-sm text-gray-500 mt-1 line-clamp-2"
-      >
+      <p v-if="recipe.description" class="text-sm text-gray-500 mt-1 line-clamp-2">
         {{ recipe.description }}
       </p>
       <div class="flex items-center gap-3 mt-3 text-xs text-gray-400">

@@ -4,7 +4,8 @@ import { storeAuthCode } from "../../utils/auth";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const { password, client_id, redirect_uri, state, code_challenge, code_challenge_method, scope } = body;
+  const { password, client_id, redirect_uri, state, code_challenge, code_challenge_method, scope } =
+    body;
 
   const secret = process.env.APP_SECRET;
   if (!secret) {

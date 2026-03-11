@@ -1,0 +1,11 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: lint
+      glob: "*.{js,ts,vue,mjs}"
+      run: bunx oxlint {staged_files}
+
+    - name: format
+      glob: "*.{js,ts,vue,mjs,json,css}"
+      run: bunx oxfmt {staged_files}
+      stage_fixed: true

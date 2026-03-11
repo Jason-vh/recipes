@@ -45,13 +45,38 @@ function validateOAuthToken(token: string): boolean {
 }
 
 // In-memory store for OAuth authorization codes
-const authCodes = new Map<string, { expiresAt: number; codeChallenge?: string; codeChallengeMethod?: string; redirectUri: string; clientId: string }>();
+const authCodes = new Map<
+  string,
+  {
+    expiresAt: number;
+    codeChallenge?: string;
+    codeChallengeMethod?: string;
+    redirectUri: string;
+    clientId: string;
+  }
+>();
 
-export function storeAuthCode(code: string, data: { expiresAt: number; codeChallenge?: string; codeChallengeMethod?: string; redirectUri: string; clientId: string }): void {
+export function storeAuthCode(
+  code: string,
+  data: {
+    expiresAt: number;
+    codeChallenge?: string;
+    codeChallengeMethod?: string;
+    redirectUri: string;
+    clientId: string;
+  },
+): void {
   authCodes.set(code, data);
 }
 
-export function consumeAuthCode(code: string): { codeChallenge?: string; codeChallengeMethod?: string; redirectUri: string; clientId: string } | null {
+export function consumeAuthCode(
+  code: string,
+): {
+  codeChallenge?: string;
+  codeChallengeMethod?: string;
+  redirectUri: string;
+  clientId: string;
+} | null {
   const data = authCodes.get(code);
   if (!data) return null;
   authCodes.delete(code);

@@ -35,9 +35,7 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 400, statusMessage: "Missing code_verifier" });
     }
 
-    const expectedChallenge = base64UrlEncode(
-      createHash("sha256").update(code_verifier).digest()
-    );
+    const expectedChallenge = base64UrlEncode(createHash("sha256").update(code_verifier).digest());
 
     if (expectedChallenge !== authCode.codeChallenge) {
       throw createError({ statusCode: 400, statusMessage: "Invalid code_verifier" });
@@ -60,9 +58,5 @@ export default defineEventHandler(async (event) => {
 });
 
 function base64UrlEncode(buffer: Buffer): string {
-  return buffer
-    .toString("base64")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
+  return buffer.toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }

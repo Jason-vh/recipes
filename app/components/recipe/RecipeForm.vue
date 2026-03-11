@@ -100,11 +100,7 @@
         </button>
       </div>
       <div class="space-y-2">
-        <div
-          v-for="(ing, idx) in form.ingredients"
-          :key="idx"
-          class="flex gap-2 items-start"
-        >
+        <div v-for="(ing, idx) in form.ingredients" :key="idx" class="flex gap-2 items-start">
           <input
             v-model="ing.amount"
             placeholder="Amt"
@@ -150,11 +146,7 @@
         </button>
       </div>
       <div class="space-y-2">
-        <div
-          v-for="(step, idx) in form.instructions"
-          :key="idx"
-          class="flex gap-2 items-start"
-        >
+        <div v-for="(step, idx) in form.instructions" :key="idx" class="flex gap-2 items-start">
           <span class="shrink-0 w-6 h-8 flex items-center justify-center text-xs text-gray-400">
             {{ idx + 1 }}.
           </span>
@@ -201,11 +193,7 @@
           class="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg text-sm"
           @keydown.enter.prevent="addTag"
         />
-        <button
-          type="button"
-          class="text-sm text-blue-600 hover:text-blue-700"
-          @click="addTag"
-        >
+        <button type="button" class="text-sm text-blue-600 hover:text-blue-700" @click="addTag">
           Add
         </button>
       </div>
@@ -233,7 +221,7 @@
       :disabled="loading"
       class="w-full py-2.5 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
     >
-      {{ loading ? 'Saving...' : (initial ? 'Update Recipe' : 'Create Recipe') }}
+      {{ loading ? "Saving..." : initial ? "Update Recipe" : "Create Recipe" }}
     </button>
   </form>
 </template>
@@ -273,9 +261,7 @@ const form = reactive({
     text: inst.text || "",
     group: inst.group || "",
   })),
-  tags: (props.initial?.tags || []).map((t: any) =>
-    typeof t === "string" ? t : t.name
-  ),
+  tags: (props.initial?.tags || []).map((t: any) => (typeof t === "string" ? t : t.name)),
 });
 
 function addIngredient() {

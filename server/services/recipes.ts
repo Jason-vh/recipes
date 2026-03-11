@@ -1,11 +1,5 @@
 import { db } from "../db";
-import {
-  recipes,
-  ingredients,
-  instructions,
-  tags,
-  recipeTags,
-} from "../db/schema";
+import { recipes, ingredients, instructions, tags, recipeTags } from "../db/schema";
 import { eq, ilike, sql, and, desc, asc, count } from "drizzle-orm";
 import type { CreateRecipeInput, UpdateRecipeInput } from "../utils/validate";
 
@@ -57,9 +51,7 @@ export async function listRecipes(opts: ListOptions = {}) {
       .from(recipes)
       .innerJoin(recipeTags, eq(recipes.id, recipeTags.recipeId))
       .innerJoin(tags, eq(recipeTags.tagId, tags.id))
-      .where(
-        and(eq(tags.slug, tag), ...conditions)
-      )
+      .where(and(eq(tags.slug, tag), ...conditions))
       .orderBy(desc(recipes.createdAt))
       .limit(limit)
       .offset(offset);
@@ -98,9 +90,7 @@ export async function listRecipes(opts: ListOptions = {}) {
     })
     .from(recipeTags)
     .innerJoin(tags, eq(recipeTags.tagId, tags.id))
-    .where(
-      sql`${recipeTags.recipeId} IN ${recipeIds}`
-    );
+    .where(sql`${recipeTags.recipeId} IN ${recipeIds}`);
 
   const tagsByRecipe = new Map<number, { name: string; slug: string }[]>();
   for (const row of tagRows) {
@@ -116,32 +106,27 @@ export async function listRecipes(opts: ListOptions = {}) {
 }
 
 export async function getRecipe(id: number) {
-  const recipe = await db
-    .select()
-    .from(recipes)
-    .where(eq(recipes.id, id))
-    .limit(1);
+  const recipe = await db.select().from(recipes).where(eq(recipes.id, id)).limit(1);
 
   if (recipe.length === 0) return null;
 
-  const [recipeIngredients, recipeInstructions, recipeTags_] =
-    await Promise.all([
-      db
-        .select()
-        .from(ingredients)
-        .where(eq(ingredients.recipeId, id))
-        .orderBy(asc(ingredients.sortOrder)),
-      db
-        .select()
-        .from(instructions)
-        .where(eq(instructions.recipeId, id))
-        .orderBy(asc(instructions.stepNumber)),
-      db
-        .select({ name: tags.name, slug: tags.slug })
-        .from(recipeTags)
-        .innerJoin(tags, eq(recipeTags.tagId, tags.id))
-        .where(eq(recipeTags.recipeId, id)),
-    ]);
+  const [recipeIngredients, recipeInstructions, recipeTags_] = await Promise.all([
+    db
+      .select()
+      .from(ingredients)
+      .where(eq(ingredients.recipeId, id))
+      .orderBy(asc(ingredients.sortOrder)),
+    db
+      .select()
+      .from(instructions)
+      .where(eq(instructions.recipeId, id))
+      .orderBy(asc(instructions.stepNumber)),
+    db
+      .select({ name: tags.name, slug: tags.slug })
+      .from(recipeTags)
+      .innerJoin(tags, eq(recipeTags.tagId, tags.id))
+      .where(eq(recipeTags.recipeId, id)),
+  ]);
 
   return {
     ...recipe[0],
@@ -152,7 +137,12 @@ export async function getRecipe(id: number) {
 }
 
 export async function createRecipe(input: CreateRecipeInput) {
-  const { ingredients: inputIngredients, instructions: inputInstructions, tags: tagNames, ...recipeData } = input;
+  const {
+    ingredients: inputIngredients,
+    instructions: inputInstructions,
+    tags: tagNames,
+    ...recipeData
+  } = input;
 
   const [newRecipe] = await db
     .insert(recipes)
@@ -176,7 +166,7 @@ export async function createRecipe(input: CreateRecipeInput) {
             unit: ing.unit ?? null,
             item: ing.item,
             notes: ing.notes ?? null,
-          }))
+          })),
         )
       : Promise.resolve(),
 
@@ -188,24 +178,31 @@ export async function createRecipe(input: CreateRecipeInput) {
             stepNumber: inst.stepNumber,
             group: inst.group ?? null,
             text: inst.text,
-          }))
+          })),
         )
       : Promise.resolve(),
 
     // Handle tags (find-or-create, then link)
-    tagNames && tagNames.length > 0
-      ? linkTags(recipeId, tagNames)
-      : Promise.resolve(),
+    tagNames && tagNames.length > 0 ? linkTags(recipeId, tagNames) : Promise.resolve(),
   ]);
 
   return getRecipe(recipeId);
 }
 
 export async function updateRecipe(id: number, input: UpdateRecipeInput) {
-  const { ingredients: inputIngredients, instructions: inputInstructions, tags: tagNames, ...recipeData } = input;
+  const {
+    ingredients: inputIngredients,
+    instructions: inputInstructions,
+    tags: tagNames,
+    ...recipeData
+  } = input;
 
   // Check recipe exists
-  const existing = await db.select({ id: recipes.id }).from(recipes).where(eq(recipes.id, id)).limit(1);
+  const existing = await db
+    .select({ id: recipes.id })
+    .from(recipes)
+    .where(eq(recipes.id, id))
+    .limit(1);
   if (existing.length === 0) return null;
 
   // Update recipe fields
@@ -221,46 +218,53 @@ export async function updateRecipe(id: number, input: UpdateRecipeInput) {
 
   if (inputIngredients !== undefined) {
     updates.push(
-      db.delete(ingredients).where(eq(ingredients.recipeId, id)).then(() =>
-        inputIngredients.length > 0
-          ? db.insert(ingredients).values(
-              inputIngredients.map((ing) => ({
-                recipeId: id,
-                sortOrder: ing.sortOrder,
-                group: ing.group ?? null,
-                amount: ing.amount ?? null,
-                unit: ing.unit ?? null,
-                item: ing.item,
-                notes: ing.notes ?? null,
-              }))
-            )
-          : undefined
-      )
+      db
+        .delete(ingredients)
+        .where(eq(ingredients.recipeId, id))
+        .then(() =>
+          inputIngredients.length > 0
+            ? db.insert(ingredients).values(
+                inputIngredients.map((ing) => ({
+                  recipeId: id,
+                  sortOrder: ing.sortOrder,
+                  group: ing.group ?? null,
+                  amount: ing.amount ?? null,
+                  unit: ing.unit ?? null,
+                  item: ing.item,
+                  notes: ing.notes ?? null,
+                })),
+              )
+            : undefined,
+        ),
     );
   }
 
   if (inputInstructions !== undefined) {
     updates.push(
-      db.delete(instructions).where(eq(instructions.recipeId, id)).then(() =>
-        inputInstructions.length > 0
-          ? db.insert(instructions).values(
-              inputInstructions.map((inst) => ({
-                recipeId: id,
-                stepNumber: inst.stepNumber,
-                group: inst.group ?? null,
-                text: inst.text,
-              }))
-            )
-          : undefined
-      )
+      db
+        .delete(instructions)
+        .where(eq(instructions.recipeId, id))
+        .then(() =>
+          inputInstructions.length > 0
+            ? db.insert(instructions).values(
+                inputInstructions.map((inst) => ({
+                  recipeId: id,
+                  stepNumber: inst.stepNumber,
+                  group: inst.group ?? null,
+                  text: inst.text,
+                })),
+              )
+            : undefined,
+        ),
     );
   }
 
   if (tagNames !== undefined) {
     updates.push(
-      db.delete(recipeTags).where(eq(recipeTags.recipeId, id)).then(() =>
-        tagNames.length > 0 ? linkTags(id, tagNames) : undefined
-      )
+      db
+        .delete(recipeTags)
+        .where(eq(recipeTags.recipeId, id))
+        .then(() => (tagNames.length > 0 ? linkTags(id, tagNames) : undefined)),
     );
   }
 
@@ -306,8 +310,6 @@ async function linkTags(recipeId: number, tagNames: string[]): Promise<void> {
   }
 
   if (tagIds.length > 0) {
-    await db.insert(recipeTags).values(
-      tagIds.map((tagId) => ({ recipeId, tagId }))
-    );
+    await db.insert(recipeTags).values(tagIds.map((tagId) => ({ recipeId, tagId })));
   }
 }

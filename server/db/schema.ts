@@ -42,7 +42,7 @@ export const ingredients = pgTable(
     item: varchar("item", { length: 255 }).notNull(),
     notes: varchar("notes", { length: 255 }),
   },
-  (table) => [index("ingredients_recipe_id_idx").on(table.recipeId)]
+  (table) => [index("ingredients_recipe_id_idx").on(table.recipeId)],
 );
 
 export const instructions = pgTable(
@@ -56,7 +56,7 @@ export const instructions = pgTable(
     group: varchar("group", { length: 100 }),
     text: text("text").notNull(),
   },
-  (table) => [index("instructions_recipe_id_idx").on(table.recipeId)]
+  (table) => [index("instructions_recipe_id_idx").on(table.recipeId)],
 );
 
 export const tags = pgTable(
@@ -66,7 +66,7 @@ export const tags = pgTable(
     name: varchar("name", { length: 100 }).notNull().unique(),
     slug: varchar("slug", { length: 100 }).notNull().unique(),
   },
-  (table) => [index("tags_slug_idx").on(table.slug)]
+  (table) => [index("tags_slug_idx").on(table.slug)],
 );
 
 export const recipeTags = pgTable(
@@ -83,7 +83,7 @@ export const recipeTags = pgTable(
     primaryKey({ columns: [table.recipeId, table.tagId] }),
     index("recipe_tags_tag_id_idx").on(table.tagId),
     index("recipe_tags_recipe_id_idx").on(table.recipeId),
-  ]
+  ],
 );
 
 // Relations
