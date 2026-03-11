@@ -23,12 +23,10 @@ export default defineEventHandler((event) => {
     .card { background: white; border-radius: 12px; padding: 2rem; max-width: 400px; width: 100%; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     h1 { font-size: 1.25rem; margin-bottom: 0.5rem; }
     p { color: #666; font-size: 0.875rem; margin-bottom: 1.5rem; }
-    input[type="password"] { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; margin-bottom: 1rem; }
     button { width: 100%; padding: 0.75rem; background: #2563eb; color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
     button:hover { background: #1d4ed8; }
     button:disabled { opacity: 0.5; cursor: not-allowed; }
     .error { color: #dc2626; font-size: 0.875rem; margin-bottom: 1rem; }
-    .status { color: #666; font-size: 0.875rem; margin-bottom: 1rem; }
     .hidden { display: none; }
   </style>
 </head>
@@ -36,23 +34,10 @@ export default defineEventHandler((event) => {
   <div class="card">
     <h1>Authorize Access</h1>
 
-    <div id="loading">
-      <p>Checking authentication...</p>
-    </div>
-
-    <!-- Passkey authentication (shown when passkeys exist) -->
-    <div id="auth-view" class="hidden">
+    <div id="auth-view">
       <p>Authenticate with your passkey to grant access.</p>
       <div id="auth-error" class="error hidden"></div>
       <button id="auth-btn" onclick="authenticate()">Authenticate with Passkey</button>
-    </div>
-
-    <!-- Passkey registration (shown when no passkeys exist) -->
-    <div id="register-view" class="hidden">
-      <p>No passkey registered yet. Enter your app secret to set one up.</p>
-      <div id="reg-error" class="error hidden"></div>
-      <input type="password" id="secret" placeholder="App Secret" autofocus>
-      <button id="reg-btn" onclick="register()">Register Passkey</button>
     </div>
   </div>
 
@@ -75,89 +60,6 @@ export default defineEventHandler((event) => {
     }
 
     const oauth = ${oauthParams};
-
-    async function init() {
-      try {
-        const res = await fetch('/oauth/webauthn/status');
-        const { registered } = await res.json();
-        document.getElementById('loading').classList.add('hidden');
-        if (registered) {
-          document.getElementById('auth-view').classList.remove('hidden');
-          // Auto-trigger authentication
-          authenticate();
-        } else {
-          document.getElementById('register-view').classList.remove('hidden');
-        }
-      } catch (e) {
-        document.getElementById('loading').innerHTML = '<p class="error">Failed to check status.</p>';
-      }
-    }
-
-    async function register() {
-      const secret = document.getElementById('secret').value;
-      const errEl = document.getElementById('reg-error');
-      const btn = document.getElementById('reg-btn');
-      errEl.classList.add('hidden');
-      btn.disabled = true;
-      btn.textContent = 'Setting up...';
-
-      try {
-        // Get registration options
-        const optRes = await fetch('/oauth/webauthn/register-options', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ secret }),
-        });
-        if (!optRes.ok) {
-          const err = await optRes.json();
-          throw new Error(err.statusMessage || 'Invalid secret');
-        }
-        const { options, challengeId } = await optRes.json();
-
-        // Convert for WebAuthn API
-        options.challenge = base64urlToBuffer(options.challenge);
-        options.user.id = base64urlToBuffer(options.user.id);
-        if (options.excludeCredentials) {
-          options.excludeCredentials = options.excludeCredentials.map(c => ({
-            ...c, id: base64urlToBuffer(c.id),
-          }));
-        }
-
-        // Create credential
-        const credential = await navigator.credentials.create({ publicKey: options });
-
-        // Serialize for server
-        const serialized = {
-          id: credential.id,
-          rawId: bufferToBase64url(credential.rawId),
-          type: credential.type,
-          response: {
-            attestationObject: bufferToBase64url(credential.response.attestationObject),
-            clientDataJSON: bufferToBase64url(credential.response.clientDataJSON),
-          },
-          clientExtensionResults: credential.getClientExtensionResults(),
-          authenticatorAttachment: credential.authenticatorAttachment,
-        };
-
-        // Verify registration
-        const verRes = await fetch('/oauth/webauthn/register-verify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ challengeId, credential: serialized, secret }),
-        });
-        if (!verRes.ok) throw new Error('Registration verification failed');
-
-        // Success — now authenticate
-        document.getElementById('register-view').classList.add('hidden');
-        document.getElementById('auth-view').classList.remove('hidden');
-        authenticate();
-      } catch (e) {
-        errEl.textContent = e.message || 'Registration failed';
-        errEl.classList.remove('hidden');
-        btn.disabled = false;
-        btn.textContent = 'Register Passkey';
-      }
-    }
 
     async function authenticate() {
       const errEl = document.getElementById('auth-error');
@@ -224,7 +126,7 @@ export default defineEventHandler((event) => {
       }
     }
 
-    init();
+    authenticate();
   </script>
 </body>
 </html>`;
