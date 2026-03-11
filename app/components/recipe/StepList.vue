@@ -2,32 +2,25 @@
   <div>
     <template v-if="groups.length > 1 || (groups.length === 1 && groups[0].name)">
       <div v-for="group in groups" :key="group.name || 'default'" class="mb-6 last:mb-0">
-        <h4
-          v-if="group.name"
-          class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-3"
-        >
+        <h4 v-if="group.name" class="text-sm font-medium text-muted uppercase tracking-wide mb-3">
           {{ group.name }}
         </h4>
-        <ol class="space-y-4">
+        <ol class="space-y-5">
           <li v-for="step in group.items" :key="step.id" class="flex gap-3">
-            <span
-              class="shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs flex items-center justify-center font-medium"
-            >
-              {{ step.stepNumber }}
+            <span class="shrink-0 font-serif text-lg text-terracotta leading-6 tabular-nums">
+              {{ step.stepNumber }}.
             </span>
-            <p class="text-sm text-gray-700 leading-relaxed pt-0.5">{{ step.text }}</p>
+            <p class="text-charcoal leading-relaxed">{{ step.text }}</p>
           </li>
         </ol>
       </div>
     </template>
-    <ol v-else class="space-y-4">
+    <ol v-else class="space-y-5">
       <li v-for="step in instructions" :key="step.id" class="flex gap-3">
-        <span
-          class="shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs flex items-center justify-center font-medium"
-        >
-          {{ step.stepNumber }}
+        <span class="shrink-0 font-serif text-lg text-terracotta leading-6 tabular-nums">
+          {{ step.stepNumber }}.
         </span>
-        <p class="text-sm text-gray-700 leading-relaxed pt-0.5">{{ step.text }}</p>
+        <p class="text-charcoal leading-relaxed">{{ step.text }}</p>
       </li>
     </ol>
   </div>

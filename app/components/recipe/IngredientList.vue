@@ -2,28 +2,25 @@
   <div>
     <template v-if="groups.length > 1 || (groups.length === 1 && groups[0].name)">
       <div v-for="group in groups" :key="group.name || 'default'" class="mb-4 last:mb-0">
-        <h4
-          v-if="group.name"
-          class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2"
-        >
+        <h4 v-if="group.name" class="text-sm font-medium text-muted uppercase tracking-wide mb-2">
           {{ group.name }}
         </h4>
         <ul class="space-y-1.5">
-          <li v-for="ing in group.items" :key="ing.id" class="text-sm text-gray-700">
+          <li v-for="ing in group.items" :key="ing.id" class="text-sm text-charcoal">
             <span v-if="ing.amount" class="font-medium">{{ ing.amount }}</span>
             <span v-if="ing.unit"> {{ ing.unit }}</span>
             {{ ing.item }}
-            <span v-if="ing.notes" class="text-gray-400">({{ ing.notes }})</span>
+            <span v-if="ing.notes" class="text-muted">({{ ing.notes }})</span>
           </li>
         </ul>
       </div>
     </template>
     <ul v-else class="space-y-1.5">
-      <li v-for="ing in ingredients" :key="ing.id" class="text-sm text-gray-700">
+      <li v-for="ing in ingredients" :key="ing.id" class="text-sm text-charcoal">
         <span v-if="ing.amount" class="font-medium">{{ ing.amount }}</span>
         <span v-if="ing.unit"> {{ ing.unit }}</span>
         {{ ing.item }}
-        <span v-if="ing.notes" class="text-gray-400">({{ ing.notes }})</span>
+        <span v-if="ing.notes" class="text-muted">({{ ing.notes }})</span>
       </li>
     </ul>
   </div>

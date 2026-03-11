@@ -1,7 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <LayoutAppHeader />
-    <main class="max-w-4xl mx-auto px-4 py-6">
+  <div class="min-h-screen bg-cream">
+    <main class="max-w-2xl mx-auto px-5 py-8">
       <slot />
     </main>
   </div>
