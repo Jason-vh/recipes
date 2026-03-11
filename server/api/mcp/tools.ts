@@ -6,16 +6,14 @@ import {
   createRecipe,
   updateRecipe,
   deleteRecipe,
-  listTags,
 } from "../../services/recipes";
 
 export function registerRecipeTools(server: McpServer) {
   server.tool(
     "list_recipes",
-    "List recipes with optional search, tag filtering, and pagination",
+    "List recipes with optional search, filtering, and pagination",
     {
       q: z.string().optional().describe("Search query for recipe title"),
-      tag: z.string().optional().describe("Filter by tag slug"),
       favorite: z.boolean().optional().describe("Filter by favorite status"),
       limit: z.number().int().min(1).max(100).optional().describe("Number of results (default 20)"),
       offset: z.number().int().min(0).optional().describe("Offset for pagination"),
@@ -35,7 +33,7 @@ export function registerRecipeTools(server: McpServer) {
 
   server.tool(
     "get_recipe",
-    "Get a recipe by ID with all ingredients, instructions, and tags",
+    "Get a recipe by ID with all ingredients and instructions",
     {
       id: z.number().int().describe("Recipe ID"),
     },
@@ -55,7 +53,7 @@ export function registerRecipeTools(server: McpServer) {
 
   server.tool(
     "create_recipe",
-    "Create a new recipe with ingredients, instructions, and tags",
+    "Create a new recipe with ingredients and instructions",
     {
       title: z.string().min(1).max(255).describe("Recipe title"),
       description: z.string().optional().describe("Brief description"),
@@ -91,7 +89,6 @@ export function registerRecipeTools(server: McpServer) {
         )
         .optional()
         .describe("List of instructions"),
-      tags: z.array(z.string()).optional().describe("Tag names (created if they don't exist)"),
     },
     async (params) => {
       const recipe = await createRecipe(params);
@@ -103,7 +100,7 @@ export function registerRecipeTools(server: McpServer) {
 
   server.tool(
     "update_recipe",
-    "Update an existing recipe. Only provided fields are updated. Ingredients/instructions/tags use replace strategy.",
+    "Update an existing recipe. Only provided fields are updated. Ingredients/instructions use replace strategy.",
     {
       id: z.number().int().describe("Recipe ID to update"),
       title: z.string().min(1).max(255).optional().describe("Recipe title"),
@@ -140,7 +137,6 @@ export function registerRecipeTools(server: McpServer) {
         )
         .optional()
         .describe("Replace all instructions"),
-      tags: z.array(z.string()).optional().describe("Replace all tags"),
     },
     async ({ id, ...params }) => {
       const recipe = await updateRecipe(id, params);
@@ -175,11 +171,4 @@ export function registerRecipeTools(server: McpServer) {
       };
     },
   );
-
-  server.tool("list_tags", "List all tags with recipe counts", {}, async () => {
-    const tagList = await listTags();
-    return {
-      content: [{ type: "text" as const, text: JSON.stringify(tagList, null, 2) }],
-    };
-  });
 }

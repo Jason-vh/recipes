@@ -6,7 +6,6 @@ import {
   boolean,
   timestamp,
   integer,
-  primaryKey,
   index,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
@@ -59,38 +58,10 @@ export const instructions = pgTable(
   (table) => [index("instructions_recipe_id_idx").on(table.recipeId)],
 );
 
-export const tags = pgTable(
-  "tags",
-  {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 100 }).notNull().unique(),
-    slug: varchar("slug", { length: 100 }).notNull().unique(),
-  },
-  (table) => [index("tags_slug_idx").on(table.slug)],
-);
-
-export const recipeTags = pgTable(
-  "recipe_tags",
-  {
-    recipeId: integer("recipe_id")
-      .references(() => recipes.id, { onDelete: "cascade" })
-      .notNull(),
-    tagId: integer("tag_id")
-      .references(() => tags.id, { onDelete: "cascade" })
-      .notNull(),
-  },
-  (table) => [
-    primaryKey({ columns: [table.recipeId, table.tagId] }),
-    index("recipe_tags_tag_id_idx").on(table.tagId),
-    index("recipe_tags_recipe_id_idx").on(table.recipeId),
-  ],
-);
-
 // Relations
 export const recipesRelations = relations(recipes, ({ many }) => ({
   ingredients: many(ingredients),
   instructions: many(instructions),
-  recipeTags: many(recipeTags),
 }));
 
 export const ingredientsRelations = relations(ingredients, ({ one }) => ({
@@ -104,20 +75,5 @@ export const instructionsRelations = relations(instructions, ({ one }) => ({
   recipe: one(recipes, {
     fields: [instructions.recipeId],
     references: [recipes.id],
-  }),
-}));
-
-export const tagsRelations = relations(tags, ({ many }) => ({
-  recipeTags: many(recipeTags),
-}));
-
-export const recipeTagsRelations = relations(recipeTags, ({ one }) => ({
-  recipe: one(recipes, {
-    fields: [recipeTags.recipeId],
-    references: [recipes.id],
-  }),
-  tag: one(tags, {
-    fields: [recipeTags.tagId],
-    references: [tags.id],
   }),
 }));

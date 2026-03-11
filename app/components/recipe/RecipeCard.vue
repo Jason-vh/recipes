@@ -20,15 +20,6 @@
         <span v-if="recipe.totalTime">{{ recipe.totalTime }} min</span>
         <span v-if="recipe.servings">{{ recipe.servings }} servings</span>
       </div>
-      <div v-if="recipe.tags?.length" class="flex flex-wrap gap-1.5 mt-3">
-        <span
-          v-for="tag in recipe.tags"
-          :key="tag.slug"
-          class="px-2 py-0.5 bg-gray-100 text-gray-500 text-xs rounded-full"
-        >
-          {{ tag.name }}
-        </span>
-      </div>
     </div>
   </NuxtLink>
 </template>
@@ -43,7 +34,6 @@ defineProps<{
     totalTime?: number | null;
     servings?: string | null;
     isFavorite: boolean;
-    tags?: { name: string; slug: string }[];
   };
 }>();
 </script>

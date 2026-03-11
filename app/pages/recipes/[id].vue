@@ -1,26 +1,10 @@
 <template>
   <div v-if="recipe">
-    <div class="flex items-start justify-between gap-4 mb-6">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900">{{ recipe.title }}</h1>
-        <p v-if="recipe.description" class="text-gray-500 mt-1">
-          {{ recipe.description }}
-        </p>
-      </div>
-      <div v-if="isLoggedIn" class="flex gap-2 shrink-0">
-        <NuxtLink
-          :to="`/recipes/${recipe.id}/edit`"
-          class="text-sm px-3 py-1.5 border border-gray-200 rounded-lg hover:bg-gray-50"
-        >
-          Edit
-        </NuxtLink>
-        <button
-          class="text-sm px-3 py-1.5 border border-red-200 text-red-600 rounded-lg hover:bg-red-50"
-          @click="handleDelete"
-        >
-          Delete
-        </button>
-      </div>
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-900">{{ recipe.title }}</h1>
+      <p v-if="recipe.description" class="text-gray-500 mt-1">
+        {{ recipe.description }}
+      </p>
     </div>
 
     <div class="flex flex-wrap gap-4 text-sm text-gray-500 mb-6">
@@ -38,10 +22,6 @@
           >{{ recipe.source || recipe.sourceUrl }}</a
         ></span
       >
-    </div>
-
-    <div v-if="recipe.tags?.length" class="flex flex-wrap gap-1.5 mb-6">
-      <UiTagPill v-for="tag in recipe.tags" :key="tag.slug" :name="tag.name" :slug="tag.slug" />
     </div>
 
     <div v-if="recipe.imageUrl" class="rounded-xl overflow-hidden mb-6">
@@ -69,19 +49,6 @@
 
 <script setup lang="ts">
 const route = useRoute();
-const { token } = useAuth();
-const isLoggedIn = computed(() => !!token.value);
 
 const { data: recipe } = await useFetch(`/api/recipes/${route.params.id}`);
-
-async function handleDelete() {
-  if (!confirm("Delete this recipe?")) return;
-
-  await $fetch(`/api/recipes/${route.params.id}`, {
-    method: "DELETE",
-    headers: { Authorization: `Bearer ${token.value}` },
-  });
-
-  navigateTo("/");
-}
 </script>

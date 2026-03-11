@@ -29,7 +29,6 @@ export const createRecipeSchema = z.object({
   isFavorite: z.boolean().optional(),
   ingredients: z.array(ingredientSchema).optional(),
   instructions: z.array(instructionSchema).optional(),
-  tags: z.array(z.string().min(1).max(100)).optional(),
 });
 
 export const updateRecipeSchema = createRecipeSchema.partial();
