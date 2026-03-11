@@ -7,12 +7,9 @@
       <img :src="recipe.imageUrl" :alt="recipe.title" class="w-full h-full object-cover" />
     </div>
     <div class="p-4">
-      <div class="flex items-start justify-between gap-2">
-        <h3 class="font-semibold text-gray-900 line-clamp-2">
-          {{ recipe.title }}
-        </h3>
-        <span v-if="recipe.isFavorite" class="text-red-500 shrink-0">&#9829;</span>
-      </div>
+      <h3 class="font-semibold text-gray-900 line-clamp-2">
+        {{ recipe.title }}
+      </h3>
       <p v-if="recipe.description" class="text-sm text-gray-500 mt-1 line-clamp-2">
         {{ recipe.description }}
       </p>
@@ -33,7 +30,6 @@ defineProps<{
     imageUrl?: string | null;
     totalTime?: number | null;
     servings?: string | null;
-    isFavorite: boolean;
   };
 }>();
 </script>

@@ -5,23 +5,18 @@ import type { CreateRecipeInput, UpdateRecipeInput } from "../utils/validate";
 
 interface ListOptions {
   q?: string;
-  favorite?: boolean;
   limit?: number;
   offset?: number;
 }
 
 export async function listRecipes(opts: ListOptions = {}) {
-  const { q, favorite, limit = 20, offset = 0 } = opts;
+  const { q, limit = 20, offset = 0 } = opts;
 
   const conditions = [];
 
   if (q) {
     conditions.push(ilike(recipes.title, `%${q}%`));
   }
-  if (favorite !== undefined) {
-    conditions.push(eq(recipes.isFavorite, favorite));
-  }
-
   const results = await db
     .select({
       id: recipes.id,
@@ -32,7 +27,6 @@ export async function listRecipes(opts: ListOptions = {}) {
       totalTime: recipes.totalTime,
       servings: recipes.servings,
       imageUrl: recipes.imageUrl,
-      isFavorite: recipes.isFavorite,
       createdAt: recipes.createdAt,
     })
     .from(recipes)
@@ -76,7 +70,6 @@ export async function createRecipe(input: CreateRecipeInput) {
     .insert(recipes)
     .values({
       ...recipeData,
-      isFavorite: recipeData.isFavorite ?? false,
     })
     .returning();
 

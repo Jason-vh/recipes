@@ -26,7 +26,6 @@ export const createRecipeSchema = z.object({
   sourceUrl: z.string().url().max(500).nullable().optional(),
   imageUrl: z.string().url().max(500).nullable().optional(),
   notes: z.string().nullable().optional(),
-  isFavorite: z.boolean().optional(),
   ingredients: z.array(ingredientSchema).optional(),
   instructions: z.array(instructionSchema).optional(),
 });

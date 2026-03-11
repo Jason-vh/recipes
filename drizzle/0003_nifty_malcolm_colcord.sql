@@ -1,0 +1,1 @@
+ALTER TABLE "recipes" DROP COLUMN "is_favorite";

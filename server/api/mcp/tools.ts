@@ -14,7 +14,6 @@ export function registerRecipeTools(server: McpServer) {
     "List recipes with optional search, filtering, and pagination",
     {
       q: z.string().optional().describe("Search query for recipe title"),
-      favorite: z.boolean().optional().describe("Filter by favorite status"),
       limit: z.number().int().min(1).max(100).optional().describe("Number of results (default 20)"),
       offset: z.number().int().min(0).optional().describe("Offset for pagination"),
     },
@@ -65,7 +64,6 @@ export function registerRecipeTools(server: McpServer) {
       sourceUrl: z.string().url().optional().describe("Source URL"),
       imageUrl: z.string().url().optional().describe("Image URL"),
       notes: z.string().optional().describe("Additional notes"),
-      isFavorite: z.boolean().optional().describe("Mark as favorite"),
       ingredients: z
         .array(
           z.object({
@@ -113,7 +111,6 @@ export function registerRecipeTools(server: McpServer) {
       sourceUrl: z.string().url().optional().describe("Source URL"),
       imageUrl: z.string().url().optional().describe("Image URL"),
       notes: z.string().optional().describe("Additional notes"),
-      isFavorite: z.boolean().optional().describe("Mark as favorite"),
       ingredients: z
         .array(
           z.object({

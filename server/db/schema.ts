@@ -1,13 +1,4 @@
-import {
-  pgTable,
-  serial,
-  text,
-  varchar,
-  boolean,
-  timestamp,
-  integer,
-  index,
-} from "drizzle-orm/pg-core";
+import { pgTable, serial, text, varchar, timestamp, integer, index } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 export const recipes = pgTable("recipes", {
@@ -22,7 +13,6 @@ export const recipes = pgTable("recipes", {
   sourceUrl: varchar("source_url", { length: 500 }),
   imageUrl: varchar("image_url", { length: 500 }),
   notes: text("notes"),
-  isFavorite: boolean("is_favorite").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
