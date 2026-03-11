@@ -7,20 +7,24 @@
         </h4>
         <ol class="space-y-5">
           <li v-for="step in group.items" :key="step.id" class="flex gap-3">
-            <span class="shrink-0 font-serif text-lg text-terracotta leading-6 tabular-nums">
-              {{ step.stepNumber }}.
+            <span
+              class="shrink-0 w-7 h-7 rounded-full bg-terra-light text-terracotta text-sm font-serif flex items-center justify-center"
+            >
+              {{ step.stepNumber }}
             </span>
-            <p class="text-charcoal leading-relaxed">{{ step.text }}</p>
+            <p class="text-charcoal leading-relaxed pt-0.5">{{ step.text }}</p>
           </li>
         </ol>
       </div>
     </template>
     <ol v-else class="space-y-5">
       <li v-for="step in instructions" :key="step.id" class="flex gap-3">
-        <span class="shrink-0 font-serif text-lg text-terracotta leading-6 tabular-nums">
-          {{ step.stepNumber }}.
+        <span
+          class="shrink-0 w-7 h-7 rounded-full bg-terra-light text-terracotta text-sm font-serif flex items-center justify-center"
+        >
+          {{ step.stepNumber }}
         </span>
-        <p class="text-charcoal leading-relaxed">{{ step.text }}</p>
+        <p class="text-charcoal leading-relaxed pt-0.5">{{ step.text }}</p>
       </li>
     </ol>
   </div>

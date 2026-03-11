@@ -35,14 +35,14 @@
       <img :src="recipe.imageUrl" :alt="recipe.title" class="w-full" />
     </div>
 
-    <div v-if="recipe.ingredients?.length" class="bg-parchment rounded-xl p-5 mb-8">
+    <div v-if="recipe.ingredients?.length" class="bg-parchment rounded-xl p-5 mb-5">
       <h2 class="font-serif text-xl text-warm-brown mb-3">Ingredients</h2>
       <RecipeIngredientList :ingredients="recipe.ingredients" />
     </div>
 
     <div
       v-if="recipe.ingredients?.length && recipe.instructions?.length"
-      class="text-center text-parchment select-none mb-8 text-lg tracking-[0.3em]"
+      class="text-center text-parchment select-none mb-5 tracking-[0.3em]"
     >
       &middot;&middot;&middot;
     </div>
