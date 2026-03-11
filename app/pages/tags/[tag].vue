@@ -10,7 +10,7 @@
       No recipes with this tag.
     </div>
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <RecipeRecipeCard v-for="recipe in recipes" :key="recipe.id" :recipe="recipe" />
+      <RecipeCard v-for="recipe in recipes" :key="recipe.id" :recipe="recipe" />
     </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div v-if="recipe">
     <h1 class="text-xl font-semibold text-gray-900 mb-6">Edit Recipe</h1>
-    <RecipeRecipeForm :initial="recipe" @submit="handleUpdate" :loading="loading" />
+    <RecipeForm :initial="recipe" @submit="handleUpdate" :loading="loading" />
     <div v-if="error" class="text-sm text-red-600 mt-4">{{ error }}</div>
   </div>
 </template>
