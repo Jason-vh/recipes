@@ -58,6 +58,14 @@ export const instructions = pgTable(
   (table) => [index("instructions_recipe_id_idx").on(table.recipeId)],
 );
 
+export const passkeys = pgTable("passkeys", {
+  id: serial("id").primaryKey(),
+  credentialId: text("credential_id").notNull().unique(),
+  publicKey: text("public_key").notNull(),
+  counter: integer("counter").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 // Relations
 export const recipesRelations = relations(recipes, ({ many }) => ({
   ingredients: many(ingredients),
