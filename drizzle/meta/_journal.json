@@ -12,8 +12,15 @@
     {
       "idx": 1,
       "version": "7",
-      "when": 1741686000000,
+      "when": 1773260000000,
       "tag": "0001_add_passkeys",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1773261000000,
+      "tag": "0002_ensure_passkeys",
       "breakpoints": true
     }
   ]
