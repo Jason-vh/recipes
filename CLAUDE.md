@@ -15,9 +15,15 @@ Migrations run automatically on startup via `server/plugins/migrate.ts` (non-blo
 
 ## Deployment
 
-- Railway deploys on push to `main`
-- Custom domain: `recipes.vhtm.eu`
-- DATABASE_URL uses Railway internal networking (`postgres.railway.internal`)
+- Hosted on the `vhtm-eu` exe.dev VM. Custom domain: `recipes.vhtm.eu`.
+- Deploy is a self-hosted GitHub Actions runner (`recipes-prod` label) that
+  runs on push to `main`. Workflow: `.github/workflows/deploy.yml`.
+- Runtime: Docker Compose (`docker-compose.yml`), single `app` service joined
+  to the external `apps-net` network. Connects to shared Postgres at
+  `postgres:5432` (DB `recipes`, role `recipes`).
+- Per-app runbook: [`deploy/README.md`](deploy/README.md). Caddy routing in
+  [`deploy/caddy.snippet`](deploy/caddy.snippet).
+- VM-wide conventions live in <https://github.com/Jason-vh/vhtm.eu>.
 
 ## Code Style
 
